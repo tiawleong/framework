@@ -11,6 +11,20 @@ class SendQueuedNotifications implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries;
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout;
+
+    /**
      * The notifiable entities that should receive the notification.
      *
      * @var \Illuminate\Support\Collection
@@ -44,6 +58,8 @@ class SendQueuedNotifications implements ShouldQueue
         $this->channels = $channels;
         $this->notifiables = $notifiables;
         $this->notification = $notification;
+        $this->tries = property_exists($notification, 'tries') ? $notification->tries : null;
+        $this->timeout = property_exists($notification, 'timeout') ? $notification->timeout : null;
     }
 
     /**
